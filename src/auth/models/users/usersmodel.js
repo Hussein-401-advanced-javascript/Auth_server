@@ -1,44 +1,47 @@
 'use strict';
-const  schema = require('./user-schema.js')
-const Model = require('../mongo-model.js')
-const bcrypt = require('bcrypt')
+const  schema = require('./user-schema.js');
+const bcrypt = require('bcrypt');
 const jwt = require ('jsonwebtoken');
 const SECRET = 'mytokensecret';
-class Users extends Model {
+class User {
   /**
      * 
      * @param {object} schema 
      */
   constructor() {
-    super (schema)
+    this.schema = schema;
   }
   // crud operations
   /**
    * 
    * @param object record 
    */
-  async save(record) {
-    const result =  await this.get({username: record.username});
-    if (result.length == 0){
-      record.password = await bcrypt.hash(record.password, 5);
-      const user = await this.create(record);
-      return user;
+  async create(user) {
+    let newUser = new this.schema(user);
+    return await newUser.save();
+
+  }
+  async authenicateBasic (username, password){
+    let user = await this.schema.find({ username: username });
+    try {
+      const valid = await bcrypt.compare(password, user[0].password);
+      return valid ? user : Promise.reject('Password not correct');
+    } catch (e) {
+      console.log(e.message);
     }
-  };
-   async authenicateBasic (user, pass){
-    let result = await this.get({username:user})
-    console.log('dataRecord', dataRecord);
-    console.log(' username>>>>>>>>>',  username);
-    let valid = await bcrypt.compare(pass,result[0].password )
-    return valid ? result : Promise.reject('password incorrect');
- };
+  }
  
-   generateToken(user){
-    let token = jwt.sign({username:user.username}, SECRET);
+  generateToken(record){
+    let token = jwt.sign({username: record.username}, SECRET);
     console.log('token>>>>>>>>>',token);
-    return token;  
-    }
+    return { token, record };
+  }
+  async list() {
+    let allUsers = await this.schema.find({});
+    return allUsers;
+  }
   
 }
 
-module.exports =new Users;
+
+module.exports =new User;

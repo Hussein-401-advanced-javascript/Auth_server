@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+    "test": "jest basicAuth.test.js --verbose --coverage",
+    "lint": "eslint '**/*.js'"
+    },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Hussein-401-advanced-javascript/Auth_server.git"
@@ -18,12 +19,15 @@
   },
   "homepage": "https://github.com/Hussein-401-advanced-javascript/Auth_server#readme",
   "dependencies": {
+    "@code-fellows/supergoose": "^1.0.11",
     "base-64": "^0.1.0",
     "bcrypt": "^5.0.0",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
+    "eslint": "^7.9.0",
     "express": "^4.17.1",
     "i": "^0.3.6",
+    "jest": "^26.4.2",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.10.6",
     "morgan": "^1.10.0",

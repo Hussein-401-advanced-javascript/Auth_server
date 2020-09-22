@@ -3,17 +3,22 @@
 const base64 = require('base-64');
 const users = require('../models/users/usersmodel.js');
 module.exports= (req, res, next) => {
-    if(!req.headers.authorization){
-        next('error Invalid Login')
-    }else{
-        const basic = req.headers.authorization.spilt(' ').pop(); /// will give us ["Basic", "cbaiucn11uu"]
-       
-            const [user, pass] = base64.decode(basic).spilt(':');/// will give us  hussein:1234
-            users.authenicateBasic(user, pass)
-            .then(validUser =>{
-                 req.token = users.generateToken(validUser[0]);
-                 req.user = validUser[0];
-                next()
-            }).catch(err => next(err))
-        } 
+  let basic = req.headers.authorization.split(' ');
+  if (basic[0] == 'Basic') {
+    let [user, pass] = base64.decode(basic[1]).split(':');
+    users.authenicateBasic(user, pass).then(valid => {
+      if (!valid) {
+        return next('Wrong pass or username');
+      }
+      return users.generateToken(valid);
+    }).then(token => {
+      req.token = token;
+      req.user = user;
+      next();
+
+    }).catch(err => next(err));
+
+  } else {
+    next('Invalid Login!! ');
+  }
 };

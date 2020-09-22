@@ -41,6 +41,24 @@ class User {
     return allUsers;
   }
   
+  authenticateToken = async function(token) {
+    
+    try {
+        let tokenObject = jwt.verify(token, SECRET);
+        console.log('tokenObject', tokenObject);
+        const result = await this.get({username : tokenObject.username});
+        console.log('result', result);
+
+      if (result.length != 0) {
+        return Promise.resolve(result[0]);
+      } else {
+        return Promise.reject('User is not found!');
+      }
+    } catch(e) {
+        return Promise.reject();
+    }
+  
+};
 }
 
 

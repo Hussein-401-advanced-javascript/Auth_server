@@ -2,6 +2,7 @@
 const express = require('express');
 const morgan = require('morgan');
 const router = require ('./auth/router.js');
+const extraRoutes = require ('../src/auth/models/extra-routes');
 const cors = require('cors');
 const app = express();
 const notFoundhandler = require('../src/middleware/404error.js');
@@ -11,7 +12,8 @@ app.use(express.json());
 app.use(cors());
 app.use(morgan('dev'));
 
-app.use('/', router);
+app.use(router);
+app.use(extraRoutes);
 app.get('*', notFoundhandler);
 app.get(erorr5dhandler);
 

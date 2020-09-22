@@ -2,10 +2,10 @@
 const bearerMiddleware = require('../middleware/bearer-auth.js');
 // const Users =require ('./users/usersmodel.js');
 const express = require('express');
-const router = express.Router();
+const extraRoutes = express.Router();
 
 
-router.get('/secret', bearerMiddleware, secretHandler);
+extraRoutes.get('/secret', bearerMiddleware, secretHandler);
 
 function secretHandler(req, res, next){
     console.log('inside secretHandler');
@@ -13,4 +13,4 @@ function secretHandler(req, res, next){
     res.status(200).json(req.user);
 
 }
-module.exports = router;
+module.exports = extraRoutes;

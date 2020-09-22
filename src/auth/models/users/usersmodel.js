@@ -46,7 +46,7 @@ class User {
     try {
         let tokenObject = jwt.verify(token, SECRET);
         console.log('tokenObject', tokenObject);
-        const result = await this.get({username : tokenObject.username});
+        const result = await this.schema.find({username : tokenObject.username});
         console.log('result', result);
 
       if (result.length != 0) {

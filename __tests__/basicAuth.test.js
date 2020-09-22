@@ -1,5 +1,4 @@
 const { server } = require('../src/server.js');
-const Users = require('../src/auth/models/users/usersmodel.js');
 const supergoose = require('@code-fellows/supergoose');
 const agent = supergoose(server);
 const base64 = require('base-64');
@@ -8,11 +7,6 @@ describe('basic-auth middlleware', () => {
   let trueTestObj = {
     username: 'hussain1',
     password: '12345',
-  };
-
-  let trueTestObj2 = {
-    username: 'hussain2',
-    password: '54321',
   };
 
   let falseObj = {
@@ -72,26 +66,5 @@ describe('basic-auth middlleware', () => {
     expect(signinResponse2.body).toEqual({});
   });
 
-  // it('can return all users', async() => {
-  //   await Users.create(trueTestObj2);
-
-  //   let autHeader = base64.encode(
-  //     `${trueTestObj.username}:${trueTestObj.password}`,
-  //   );
-
-  //   let getResponse = await agent
-  //     .get('/users')
-  //     .set('authorization', `Basic ${autHeader}`);
-  //   expect(getResponse.status).toEqual(200);
-  //   expect(getResponse.body[0].username).toEqual('hussain1');
-  //   expect(getResponse.body[1].username).toEqual('hussain2');
-  // });
-
-  // it('will return a 200 and an array of objects when called get users', async() => {
-
-  //   let getResponse = await agent.get('/users');
-  //   expect(getResponse.status).toEqual(200);
-  //   expect(getResponse.body).not.toEqual({});
-  // });
 
 });

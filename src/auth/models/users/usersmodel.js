@@ -32,7 +32,8 @@ class User {
   }
  
   generateToken(record){
-    let token = jwt.sign({username: record.username}, SECRET);
+    //return jwt.sign(username, process.env.TOKEN_SECRET, { expiresIn: '1800s' });
+    let token = jwt.sign({record}, SECRET, { expiresIn: '900s' });
     console.log('token>>>>>>>>>',token);
     return { token, record };
   }
@@ -41,24 +42,24 @@ class User {
     return allUsers;
   }
   
-  authenticateToken = async function(token) {
+  async authenticateToken (token) {
     
     try {
-        let tokenObject = jwt.verify(token, SECRET);
-        console.log('tokenObject', tokenObject);
-        const result = await this.schema.find({username : tokenObject.username});
-        console.log('result', result);
+      let tokenObject = jwt.verify(token, SECRET);
+      console.log('tokenObject', tokenObject);
+      const result = await this.schema.find({username : tokenObject.username});
+      console.log('result', result);
 
-      if (result.length != 0) {
-        return Promise.resolve(result[0]);
+      if (tokenObject) {
+        return Promise.resolve({tokenObject:tokenObject});
       } else {
         return Promise.reject('User is not found!');
       }
     } catch(e) {
-        return Promise.reject();
+      return Promise.reject();
     }
   
-};
+  }
 }
 
 

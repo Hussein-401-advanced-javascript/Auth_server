@@ -4,7 +4,7 @@ const Users =require ('./models/users/usersmodel.js');
 const basicAuth = require('./middleware/basicAuth.js');
 const router = express.Router();
 router.post('/signup', signUpHandler);
-router.post('/signin', basicAuth, signIn);
+router.post('/signin', basicAuth, signInHandler);
 router.get('/users', basicAuth, listHandler);
 
 async function signUpHandler(req, res, next) {
@@ -17,7 +17,7 @@ async function signUpHandler(req, res, next) {
       res.status(403).send(err.message);
     });
 }
-function signIn (req, res, next){
+function signInHandler (req, res, next){
   try {
     res.cookie('token', req.token);
     res.set('token', req.token);

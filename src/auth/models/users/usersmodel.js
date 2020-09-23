@@ -3,6 +3,13 @@ const  schema = require('./user-schema.js');
 const bcrypt = require('bcrypt');
 const jwt = require ('jsonwebtoken');
 const SECRET = 'mytokensecret';
+const roles ={
+  user : ['read'],
+  writer : ['read' , 'create'],
+  editor : ['read' , 'create' ,'change'],
+  admin : ['read','create' ,'update','delete'],
+}
+
 class User {
   /**
      * 
@@ -32,8 +39,12 @@ class User {
   }
  
   generateToken(record){
-    //return jwt.sign(username, process.env.TOKEN_SECRET, { expiresIn: '1800s' });
-    let token = jwt.sign({record}, SECRET, { expiresIn: '900s' });
+    // let token = jwt.sign({record}, SECRET,{capabilities: roles [record.role]}, { expiresIn: '900s' });
+    let token =  jwt.sign({
+      record,
+      capabilities : roles[record.role],
+      expiresIn: '900s' 
+    }, SECRET);
     console.log('token>>>>>>>>>',token);
     return { token, record };
   }
@@ -48,7 +59,7 @@ class User {
       let tokenObject = jwt.verify(token, SECRET);
       console.log('tokenObject', tokenObject);
       const result = await this.schema.find({username : tokenObject.username});
-      console.log('result', result);
+      console.log('result in authenticateToken', result);
 
       if (tokenObject) {
         return Promise.resolve({tokenObject:tokenObject});

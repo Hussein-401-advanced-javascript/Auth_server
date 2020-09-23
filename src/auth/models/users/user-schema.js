@@ -13,6 +13,8 @@ const users = mongoose.Schema({
   },
   role :{ 
     type:String,
+    default : 'user',
+    enum : ['admin', 'editor' ,'writer','user'],
   },
 });
 users.pre('save', async function(next) {

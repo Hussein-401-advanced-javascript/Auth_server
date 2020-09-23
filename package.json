@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "jest basicAuth.test.js --verbose --coverage",
-    "lint": "eslint '**/*.js'"
+    "lint": "eslint '**/*.js'",
+    "fix": "eslint './**/*.js' --ignore-pattern node_modules/ --fix"
+
     },
   "repository": {
     "type": "git",

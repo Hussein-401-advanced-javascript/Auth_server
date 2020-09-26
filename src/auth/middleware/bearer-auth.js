@@ -14,7 +14,7 @@ module.exports= (req, res, next) => {
     // authenticate this token and get the valid user
     // let user1= new Use
     Users.authenticateToken(token).then(validUser=> {
-      console.log('validUser ---> ',validUser);
+      console.log('validUser ---> ',validUser.tokenObject.record);
       req.user = validUser;
       next();
     }).catch(err=> next('Invalid Token!'));
